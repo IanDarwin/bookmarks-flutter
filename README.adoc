@@ -1,0 +1,16 @@
+= Bookmarks
+
+For those who use multiple browsers, synching browser bookmarks
+is not an option.
+
+This Flutter project is part of Ian's Bookmarks scheme.
+Hopefully it will someday interact with a datastore backend.
+
+== Status
+
+At present the main invokes the EditPage directly.
+It can also be started if any other app does a "Share"
+of a web link.
+
+A future version will have a local database,
+synched either with Ian's Java-based backend or with FireBase.
