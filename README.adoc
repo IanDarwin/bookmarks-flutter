@@ -8,9 +8,18 @@ Hopefully it will someday interact with a datastore backend.
 
 == Status
 
-At present the main invokes the EditPage directly.
-It can also be started if any other app does a "Share"
+**INCOMPLETE**
+
+At present the main invokes the EditPage directly;
+the EditPage can also be started if any other app does a "Share"
 of a web link.
+
+There is a start of a list-based main page that will
+invoke the Edit page from the FAB (for new) or on
+list long-press (for edit existing).
 
 A future version will have a local database,
 synched either with Ian's Java-based backend or with FireBase.
+
+And there'll have to be a settings page for the
+server info and other options.

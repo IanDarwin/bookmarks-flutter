@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 import 'model/Bookmark.dart';
+import 'main.dart' show listData;
 
 class EditPage extends StatefulWidget {
   const EditPage({super.key});
@@ -75,6 +76,8 @@ class EditPageState extends State<EditPage> {
                     autofocus: true,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (s) => s!.startsWith("https://") ? null : "An 'HTTPS:' URL please",
+                    onChanged: (s) => _bookmark.url = s,
+                    onSaved: (s) => _bookmark.url = s,
                     controller: urlController)),
               ]),
               Row(children: [
@@ -119,6 +122,8 @@ class EditPageState extends State<EditPage> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         debugPrint("Save/Update($_bookmark)");
+                        listData.add(_bookmark);
+                        Navigator.of(context).pop();
                       } else {
                         FocusScope.of(context).requestFocus(_focusNode);
                       }
