@@ -48,10 +48,11 @@ class _ListPageState extends State<ListPage> {
         onPressed: () async {
           Bookmark results = await Navigator.of(context).push(MaterialPageRoute(
               builder: (context) => (const EditPage())));
-          // BuildContext used from a StatefulWidget, 'mounted''
+          // BuildContext used from a StatefulWidget, 'mounted'
           // MUST be checked after an asynchronous gap.
-          if (!mounted)
+          if (!mounted) {
             return;
+          }
           setState( () => listData.add(results) );
         },
         tooltip: 'Add bookmark',
