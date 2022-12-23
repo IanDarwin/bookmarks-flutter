@@ -3,7 +3,6 @@ import 'dart:async';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 import 'model/Bookmark.dart';
-import 'main.dart' show listData;
 
 class EditPage extends StatefulWidget {
   const EditPage({super.key});
@@ -17,6 +16,7 @@ class EditPageState extends State<EditPage> {
   late StreamSubscription _intentDataStreamSubscription;
   // This will become dynamic
   final List<String> _categories = [
+    "News",
     "ToDo",
     "Reading",
     "Writing",
@@ -122,8 +122,7 @@ class EditPageState extends State<EditPage> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         debugPrint("Save/Update($_bookmark)");
-                        listData.add(_bookmark);
-                        Navigator.of(context).pop();
+                        Navigator.pop(context, _bookmark);
                       } else {
                         FocusScope.of(context).requestFocus(_focusNode);
                       }

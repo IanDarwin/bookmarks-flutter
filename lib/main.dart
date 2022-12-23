@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'edit_page.dart';
 import 'model/Bookmark.dart';
 
-/// This version of the app only provides an Edit/View page.
-/// The next version will likely have a ListView here.
 void main() => runApp(
     MaterialApp(home: const ListPage(title: "Browser-indie Bookmarks")));
 
@@ -16,8 +15,6 @@ List<Bookmark> listData = [
 
 /// A ListView-based StatefulWidget here,
 /// with the FAB set to + to open an EditPage.
-// XXX NB Move the Intent registration stuff here, and
-// launch an EditPage as needed.
 class ListPage extends StatefulWidget {
   const ListPage({super.key, required this.title});
   final String title;
@@ -40,16 +37,30 @@ class _ListPageState extends State<ListPage> {
               leading: const Icon(Icons.open_in_browser_outlined),
               title: Text(bookmark.text!),
               subtitle: Text(bookmark.url!),
+              onTap: () => _launchUrl(bookmark.url),
             ),
           ).toList(),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () =>
-            Navigator.of(context).push(MaterialPageRoute(
-                builder: (context) => (const EditPage()))),
+        onPressed: () async {
+          Bookmark results = await Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => (const EditPage())));
+          // BuildContext used from a StatefulWidget, 'mounted''
+          // MUST be checked after an asynchronous gap.
+          if (!mounted)
+            return;
+          setState( () => listData.add(results) );
+        },
         tooltip: 'Add bookmark',
         child: const Icon(Icons.add),
       ),
     );
+  }
+
+  Future<void> _launchUrl(urlStr) async {
+    var url = Uri.parse(urlStr);
+    if (!await launchUrl(url)) {
+      throw 'Could not launch $urlStr';
+    }
   }
 }
