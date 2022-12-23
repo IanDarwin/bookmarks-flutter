@@ -54,15 +54,13 @@ class EditPageState extends State<EditPage> {
   Widget build(BuildContext context) {
     var urlController = TextEditingController(text: _bookmark.url);
     var titleController = TextEditingController(text: _bookmark.text);
-    String categoryText = "";
 
-    return MaterialApp(
-      home: Scaffold(
+    return Scaffold(
         appBar: AppBar(
           title: const Text('Bookmarks app'),
         ),
         body: Padding(
-        padding: const EdgeInsets.all(5),
+        padding: const EdgeInsets.all(10),
         child: Form(
           key: _formKey,
           child: Column(
@@ -119,14 +117,17 @@ class EditPageState extends State<EditPage> {
                 ElevatedButton(
                     child: const Text("Save/Update"),
                     onPressed: () {
-                      debugPrint("Save/Update($_bookmark)");
+                      if (_formKey.currentState!.validate()) {
+                        debugPrint("Save/Update($_bookmark)");
+                      } else {
+                        FocusScope.of(context).requestFocus(_focusNode);
+                      }
                     }),
               ]),
             ],
           ),
         ),
       ),
-    )
     );
   }
 
