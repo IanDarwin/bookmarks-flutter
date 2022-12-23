@@ -1,3 +1,4 @@
+import 'package:bookmarks/model/bookmarks_data_access.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
@@ -14,13 +15,6 @@ class EditPage extends StatefulWidget {
 class EditPageState extends State<EditPage> {
   final Bookmark _bookmark = Bookmark.empty();
   late StreamSubscription _intentDataStreamSubscription;
-  // This will become dynamic
-  final List<String> _categories = [
-    "News",
-    "ToDo",
-    "Reading",
-    "Writing",
-  ];
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late FocusNode _focusNode;
@@ -53,8 +47,6 @@ class EditPageState extends State<EditPage> {
 
   @override
   Widget build(BuildContext context) {
-    var urlController = TextEditingController(text: _bookmark.url);
-    var titleController = TextEditingController(text: _bookmark.text);
 
     return Scaffold(
         appBar: AppBar(
@@ -78,7 +70,8 @@ class EditPageState extends State<EditPage> {
                     validator: (s) => s!.startsWith("https://") ? null : "An 'HTTPS:' URL please",
                     onChanged: (s) => _bookmark.url = s,
                     onSaved: (s) => _bookmark.url = s,
-                    controller: urlController)),
+                    )
+                ),
               ]),
               Row(children: [
                 Expanded(child:TextFormField(maxLength: 128,
@@ -91,7 +84,7 @@ class EditPageState extends State<EditPage> {
                     validator: (s) => s!.isEmpty ? 'Title required' : null,
                     onChanged: (s) => _bookmark.text = s,
                     onSaved: (s) => _bookmark.text = s,
-                    controller: titleController),
+                    ),
                 ),
               ]),
               DropdownButtonFormField<String>(
@@ -101,7 +94,7 @@ class EditPageState extends State<EditPage> {
                 ),
                 // value: _selectedCategory,
                 isExpanded: true,
-                items: _categories.map((String cat) {
+                items: BookmarksDataAccess.categories.map((String cat) {
                   return DropdownMenuItem(
                     value: cat,
                     child: Text(cat),

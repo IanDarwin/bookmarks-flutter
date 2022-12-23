@@ -8,9 +8,11 @@ void main() => runApp(
     MaterialApp(home: const ListPage(title: "Browser-indie Bookmarks")));
 
 List<Bookmark> listData = [
+  Bookmark('banking', 'https://www.alrajhibank.com.sa/en', 'al-Rajhi Bank'),
   Bookmark('tech', 'https://darwinsys.com/', 'DarwinSys.com'),
   Bookmark('evs', 'https://IanOnEVs.com/', 'Ian On EVs'),
   Bookmark('photog', 'https://IanDarwinPhoto.com', 'Ian Darwin Photo'),
+  Bookmark('education', 'https://learningtree.com', 'Learning Tree International'),
 ];
 
 /// A ListView-based StatefulWidget here,
@@ -27,6 +29,7 @@ class _ListPageState extends State<ListPage> {
   @override
   Widget build(BuildContext context) {
     debugPrint("In _ListPageState.build()");
+    listData.sort((b1, b2) => b1.text!.toLowerCase().compareTo(b2.text!.toLowerCase()));
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),

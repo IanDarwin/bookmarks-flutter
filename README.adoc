@@ -1,7 +1,7 @@
 = Bookmarks
 
 For those who use multiple browsers, synching browser bookmarks
-is not an option.
+is not a convenient option.
 
 This Flutter project is part of Ian's Bookmarks scheme.
 Hopefully it will someday interact with a datastore backend.
