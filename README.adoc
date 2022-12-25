@@ -4,13 +4,13 @@ For those who use multiple browsers, synching browser bookmarks
 is not a convenient option.
 
 This Flutter project is part of Ian's Bookmarks scheme.
-Hopefully it will someday interact with a datastore backend.
 
 == Status
 
 **Note:** At present this is a demo only, and while the UI
 works for some domains of "works", there is NO PERSISTENCE
 so please don't spend time typing URLs in here.
+Hopefully it will soon interact with a datastore backend.
 
 There are two main pages so far:
 
@@ -19,16 +19,13 @@ There are two main pages so far:
 ** invoke the Add page from the FAB
 * EditPage - page for editing a bookmark.
 
-At present the main() invokes the ListPage directly;
-if you change main() to go directly to EditPage, then
-the EditPage can be started when any other app does a "Share"
-of a web link, even if the app isn't running.
+The EditPage can be started when any other app does a "Share"
+of a web link and you choose to open with Bookmarks,
+even if the app isn't running. This works thanks to the
+receive_sharing_intent plugin from pub.dev.
 
 ListPage should also handle long press on a bookmark, with a popup menu
 for edit, delete (any other?).
-
-The "share intent" stuff in EditPage.initState() should be moved
-into main, and should fire off an EditPage when a request comes in.
 
 A future version will have a local database,
 backed either with Ian's Java-based backend or with FireBase.
