@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'edit_page.dart';
+import 'intent_receiver.dart';
 import 'model/Bookmark.dart';
 
 void main() => runApp(
@@ -26,6 +27,11 @@ class ListPage extends StatefulWidget {
 
 class _ListPageState extends State<ListPage> {
 
+  @override
+  void initState() {
+    IntentReceiver().setupReceiving(context);
+    super.initState();
+  }
   @override
   Widget build(BuildContext context) {
     debugPrint("In _ListPageState.build()");

@@ -6,44 +6,17 @@ import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 import 'model/Bookmark.dart';
 
 class EditPage extends StatefulWidget {
-  const EditPage({super.key});
+  final String? url;
+  const EditPage({super.key, this.url});
 
   @override
   EditPageState createState() => EditPageState();
 }
 
 class EditPageState extends State<EditPage> {
-  final Bookmark _bookmark = Bookmark.empty();
-  late StreamSubscription _intentDataStreamSubscription;
-
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late FocusNode _focusNode;
-
-  @override
-  void initState() {
-    super.initState();
-    _focusNode = FocusNode();
-    // For sharing or opening urls/text coming from outside the app while the app is in memory
-    _intentDataStreamSubscription =
-        ReceiveSharingIntent.getTextStream().listen((String value) {
-          setState(() {
-            _bookmark.url = value;
-            debugPrint("Received Share: ${_bookmark.url}");
-          });
-        }, onError: (err) {
-          debugPrint("getLinkStream error: $err");
-        });
-
-    // For sharing or opening urls/text coming from outside the app while the app is closed
-    ReceiveSharingIntent.getInitialText().then((String? value) {
-      setState(() {
-        _bookmark.url = value;
-        if (_bookmark.url != null) {
-          debugPrint("Received Share: $_bookmark.url");
-        }
-      });
-    });
-  }
+  final Bookmark _bookmark = Bookmark.empty();
 
   @override
   Widget build(BuildContext context) {
@@ -65,6 +38,7 @@ class EditPageState extends State<EditPage> {
                       border: OutlineInputBorder(),
                       labelText: "URL",
                     ),
+                    initialValue: widget.url ?? "",
                     autofocus: true,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (s) => s!.startsWith("https://") ? null : "An 'HTTPS:' URL please",
@@ -126,11 +100,5 @@ class EditPageState extends State<EditPage> {
         ),
       ),
     );
-  }
-
-  @override
-  void dispose() {
-    _intentDataStreamSubscription.cancel();
-    super.dispose();
   }
 }
