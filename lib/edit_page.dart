@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
-import 'model/Bookmark.dart';
+import 'model/bookmark.dart';
 
 class EditPage extends StatefulWidget {
   final String? url;
@@ -74,7 +74,7 @@ class EditPageState extends State<EditPage> {
                     child: Text(cat),
                   );
                 }).toList(),
-                onChanged: (value) => { _bookmark.category = value! },
+                onChanged: (value) => { _bookmark.topic = value! },
                 validator: (s) => s == null || s == 'Required' ? "Category required" : null,
               ),
               Row(mainAxisAlignment: MainAxisAlignment.end,
@@ -83,6 +83,8 @@ class EditPageState extends State<EditPage> {
                     child: const Text("Cancel"),
                     onPressed: () {
                       debugPrint("'Cancel command accepted.'");
+                      _bookmark.id = -1;  // poison, can't pass null
+                      Navigator.pop(context, _bookmark);
                     }),
                 ElevatedButton(
                     child: const Text("Save/Update"),

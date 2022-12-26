@@ -3,10 +3,12 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'edit_page.dart';
 import 'intent_receiver.dart';
-import 'model/Bookmark.dart';
+import 'model/bookmark.dart';
 
 void main() => runApp(
-    MaterialApp(home: const ListPage(title: "Browser-indie Bookmarks")));
+    MaterialApp(
+        theme: ThemeData(useMaterial3: true),
+        home: const ListPage(title: "Browser-indie Bookmarks")));
 
 List<Bookmark> listData = [
   Bookmark('banking', 'https://www.alrajhibank.com.sa/en', 'al-Rajhi Bank'),
@@ -57,6 +59,9 @@ class _ListPageState extends State<ListPage> {
           // BuildContext used from a StatefulWidget, 'mounted'
           // MUST be checked after an asynchronous gap.
           if (!mounted) {
+            return;
+          }
+          if (results.id == -1) {
             return;
           }
           setState( () => listData.add(results) );
