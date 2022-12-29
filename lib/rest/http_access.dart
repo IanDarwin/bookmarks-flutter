@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
-import 'bookmark.dart';
-import 'local_db_provider.dart';
+import 'package:bookmarks/model/bookmark.dart';
+import 'package:bookmarks/model/local_db_provider.dart';
 
+// NOT IN USE AT PRESENT
 class BookmarksHttpLoader {
   BookmarksHttpLoader(this.localdb);
   LocalDbProvider localdb;

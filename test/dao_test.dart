@@ -1,5 +1,5 @@
 import 'package:bookmarks/model/bookmark.dart';
-import 'package:bookmarks/model/bookmark_http_loader.dart';
+import 'package:bookmarks/rest/http_access.dart';
 import 'package:bookmarks/model/local_db_provider.dart';
 import 'package:test/test.dart';
 
