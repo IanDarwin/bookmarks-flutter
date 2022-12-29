@@ -1,4 +1,4 @@
-import 'package:bookmarks/model/local_db_provider.dart';
+import 'package:bookmarks/data/local_db_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 

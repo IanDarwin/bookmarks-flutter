@@ -6,7 +6,7 @@
 // tree, read text, and verify that the values of widget properties are correct.
 
 import 'package:bookmarks/edit_page.dart';
-import 'package:bookmarks/model/local_db_provider.dart';
+import 'package:bookmarks/data/local_db_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 

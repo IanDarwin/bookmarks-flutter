@@ -3,7 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'bookmark.dart';
+import '../model/bookmark.dart';
 
 const bookmarkTableName = 'bookmarks';
 const columnId = 'id';
