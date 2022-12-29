@@ -1,4 +1,3 @@
-import 'package:bookmarks/converters/bookmark_json.dart';
 import 'package:bookmarks/model/bookmark.dart';
 import 'package:test/test.dart';
 
@@ -15,14 +14,14 @@ void main() {
 \t\t"text":"Marvelous new invention!"
 \t}}
 """;
-    var actual = BookmarkJson.toJson(bookmark);
+    var actual = bookmark.toJsonString();
     expect(expected, actual);
   });
 
   test('FromJson', () {
     String json = '{"bookmark":{"id":42,"topic":"test","url":"https://a.b.c","text":"Grokkit!"}}';
     Bookmark expected = Bookmark("test", "https://a.b.c", "Grokkit!", id:42);
-    var fromJson = BookmarkJson.fromJson(json);
+    var fromJson = Bookmark.fromJsonString(json);
     expect(fromJson, expected);
   });
 });

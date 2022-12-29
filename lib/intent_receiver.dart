@@ -1,9 +1,13 @@
+import 'package:bookmarks/model/local_db_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 import 'edit_page.dart';
 
 class IntentReceiver {
+  LocalDbProvider localDbProvider;
+
+  IntentReceiver(this.localDbProvider);
 
   void setupReceiving(BuildContext context) {
     // For sharing or opening urls/text coming from outside the app while the app is in memory
@@ -26,6 +30,6 @@ class IntentReceiver {
       return;
     }
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => EditPage(url: value)));
+        builder: (context) => EditPage(localDbProvider, url: value)));
   }
 }

@@ -1,13 +1,14 @@
-import 'package:bookmarks/model/bookmarks_data_access.dart';
+import 'package:bookmarks/model/local_db_provider.dart';
 import 'package:flutter/material.dart';
-import 'dart:async';
-import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 import 'model/bookmark.dart';
 
+// Called with a URL when launched from an intent,
+// called without a URL when launched from the + button.
 class EditPage extends StatefulWidget {
   final String? url;
-  const EditPage({super.key, this.url});
+  final LocalDbProvider localDbProvider;
+  const EditPage(this.localDbProvider, {this.url, super.key});
 
   @override
   EditPageState createState() => EditPageState();
@@ -20,6 +21,8 @@ class EditPageState extends State<EditPage> {
 
   @override
   Widget build(BuildContext context) {
+    // Stash value here b/c onChanged isn't triggered
+    _bookmark.url = widget.url;
 
     return Scaffold(
         appBar: AppBar(
@@ -68,7 +71,7 @@ class EditPageState extends State<EditPage> {
                 ),
                 // value: _selectedCategory,
                 isExpanded: true,
-                items: BookmarksDataAccess.categories.map((String cat) {
+                items: widget.localDbProvider.categories.map((String cat) {
                   return DropdownMenuItem(
                     value: cat,
                     child: Text(cat),
@@ -91,6 +94,7 @@ class EditPageState extends State<EditPage> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         debugPrint("Save/Update($_bookmark)");
+                        widget.localDbProvider.insert(_bookmark);
                         Navigator.pop(context, _bookmark);
                       } else {
                         FocusScope.of(context).requestFocus(_focusNode);
