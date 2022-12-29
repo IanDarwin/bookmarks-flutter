@@ -8,9 +8,10 @@ This Flutter project is part of Ian's Bookmarks scheme.
 == Status
 
 **Note:** At present this is a demo only, and while the UI
-works for some domains of "works", there is NO PERSISTENCE
-so please don't spend time typing URLs in here.
-Hopefully it will soon interact with a datastore backend.
+works for some domains of "works", there is NO OFFSITE
+STORAGE so please don't spend time typing URLs in here;
+you could lose all your work by uninstall/reinstall
+(or by losing your device, of course).
 
 There are two main pages so far:
 
@@ -24,11 +25,14 @@ of a web link and you choose to open with Bookmarks,
 even if the app isn't running. This works thanks to the
 receive_sharing_intent plugin from pub.dev.
 
+ListPage needs Category restriction dropdown, and Search.
+Some of these lists will become long over time.
+
 ListPage should also handle long press on a bookmark, with a popup menu
 for edit, delete (any other?).
 
-A future version will have a local database,
-backed either with Ian's Java-based backend or with FireBase.
+A future version will have teh local database backed,
+either with Ian's Java-based backend or with FireBase.
 
 And there'll need to be a settings page for the
 server info and other options.

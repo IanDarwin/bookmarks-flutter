@@ -21,7 +21,7 @@ class EditPageState extends State<EditPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Stash value here b/c onChanged isn't triggered
+    // Stash value here b/c onChanged isn't triggered when 'share' used
     _bookmark.url = widget.url;
 
     return Scaffold(
@@ -41,10 +41,12 @@ class EditPageState extends State<EditPage> {
                       border: OutlineInputBorder(),
                       labelText: "URL",
                     ),
-                    initialValue: widget.url ?? "",
+                    initialValue: widget.url ?? "https://",
                     autofocus: true,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
-                    validator: (s) => s!.startsWith("https://") ? null : "An 'HTTPS:' URL please",
+                    validator: (s) => s!.startsWith("https://") && s!.length > 8 ?
+                      null :
+                      "An 'HTTPS:' URL please",
                     onChanged: (s) => _bookmark.url = s,
                     onSaved: (s) => _bookmark.url = s,
                     )
@@ -94,7 +96,11 @@ class EditPageState extends State<EditPage> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         debugPrint("Save/Update($_bookmark)");
-                        widget.localDbProvider.insert(_bookmark);
+                        if (_bookmark.id == null || _bookmark.id == 0) {
+                          widget.localDbProvider.insert(_bookmark);
+                        } else {
+                          widget.localDbProvider.update(_bookmark);
+                        }
                         Navigator.pop(context, _bookmark);
                       } else {
                         FocusScope.of(context).requestFocus(_focusNode);

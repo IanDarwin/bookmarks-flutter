@@ -18,10 +18,6 @@ const topicColumnDetails = 'text';
 
 /// Bookmark provider.
 class LocalDbProvider {
-  String path;
-  LocalDbProvider(this.path) {
-    open(path);
-  }
 
   /// The database when opened.
   late Database _db;
@@ -37,7 +33,7 @@ class LocalDbProvider {
   }
 
   Future<void> _onCreate(Database database, int version) async {
-    debugPrint("In onCreate");
+    debugPrint("In onCreate; base = $database");
     await database.execute('''
 create table $bookmarkTableName ( 
   $columnId integer primary key autoincrement, 
@@ -45,11 +41,11 @@ create table $bookmarkTableName (
   $columnUrl text not null,
   $columnText text not null)
 ''');
-    debugPrint("base = $database; db = $_db");
+    // Insert starter bookmark records
     for (Bookmark b in _demoList) {
       await database.execute('''
         insert into $bookmarkTableName($columnTopic,$columnUrl,$columnText)
-        values('${b.topic}, ${b.url}, ${b.text}');
+        values('${b.topic}', '${b.url}', '${b.text}');
         ''');
     }
   }
@@ -58,7 +54,7 @@ create table $bookmarkTableName (
     throw(Exception("onUpgrade not needed yet"));
   }
 
-  // Initial demo list of bookmarks
+  // Initial starter list of bookmarks
   final List<Bookmark> _demoList = [
     Bookmark('banking', 'https://www.alrajhibank.com.sa/en', 'al-Rajhi Bank'),
     Bookmark('tech', 'https://darwinsys.com/', 'DarwinSys.com'),
@@ -72,6 +68,7 @@ create table $bookmarkTableName (
   /// "Create": Insert a Bookmark.
   Future<Bookmark> insert(Bookmark bookmark) async {
     debugPrint("LocalDbProvider::insert$bookmark");
+    bookmark.id = null;
     bookmark.id = await _db.insert(bookmarkTableName, bookmark.toMap());
     return bookmark;
   }
@@ -94,10 +91,11 @@ create table $bookmarkTableName (
     if (maps.isNotEmpty) {
       for (Map m in maps) {
         result.add(Bookmark.fromMap(m));
-      } return result;
+      }
     } else {
-      throw Exception("No records found");
+      result.add(Bookmark(null, null, "No bookmarks found - add some!"));
     }
+    return result;
   }
 
   /// "Update" a Bookmark.
@@ -115,8 +113,8 @@ create table $bookmarkTableName (
   // Fake for now
   static final List<String> _categories = [
     "News",
-    "Bookmark",
-    "Reading",
+    "Research",
+    "To Read",
     "Writing",
   ];
 

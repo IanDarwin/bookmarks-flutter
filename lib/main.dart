@@ -8,9 +8,10 @@ import 'model/bookmark.dart';
 
 late LocalDbProvider localDbProvider ;
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  localDbProvider = LocalDbProvider("bookmarks.db");
+  localDbProvider = LocalDbProvider();
+  await localDbProvider.open('bookmarks.db');
   runApp(const MaterialApp(
     home: ListPage(title: "Browser-independent Bookmarks"),
   ));
@@ -33,11 +34,12 @@ class _ListPageState extends State<ListPage> {
   void initState() {
     IntentReceiver(localDbProvider).setupReceiving(context);
     super.initState();
-    _all = localDbProvider.getAllBookmarks();
   }
+
   @override
   Widget build(BuildContext context) {
     debugPrint("In _ListPageState.build()");
+    _all = localDbProvider.getAllBookmarks();
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
@@ -73,7 +75,9 @@ class _ListPageState extends State<ListPage> {
           if (!mounted) {
             return;
           }
-          if (results.id == -1) {
+	  // Value of -1 here indicates Cancel was pressed, so no item
+	  // saved, and thus don't need to rebuild.
+	  if (results.id == -1) {
             return;
           }
           setState( () {} );
