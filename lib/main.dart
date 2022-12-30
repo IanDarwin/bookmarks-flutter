@@ -45,27 +45,27 @@ class _ListPageState extends State<ListPage> {
         title: Text(widget.title),
       ),
       body:  ListView(
-          children:  <Widget>[
-      FutureBuilder<List<Bookmark>>(
-        future: _all,
-        builder: (BuildContext context, AsyncSnapshot<List<Bookmark>> snapshot) {
-          if (snapshot.hasData) {
-            return Column(children: snapshot.data!.map((bookmark) =>
-                ListTile(
-                  leading: const Icon(Icons.open_in_browser_outlined),
-                  title: Text(bookmark.text!),
-                  subtitle: Text(bookmark.url!),
-                  onTap: () => _launchUrl(bookmark.url),
-                )).toList());
-          }
-          if (snapshot.hasError) {
-            return const Center(child: Text("Something went wrong! See logs"));
-          }
-          // Still here, so must be still in progress...
-          return const Center(child: Text('Loading...'));
-          }
-        )
-      ]),
+          children: <Widget>[
+            FutureBuilder<List<Bookmark>>(
+                future: _all,
+                builder: (BuildContext context, AsyncSnapshot<List<Bookmark>> snapshot) {
+                  if (snapshot.hasData) {
+                    return Column(children: snapshot.data!.map((bookmark) =>
+                        ListTile(
+                          leading: const Icon(Icons.open_in_browser_outlined),
+                          title: Text(bookmark.text!),
+                          subtitle: Text(bookmark.url!),
+                          onTap: () => _launchUrl(bookmark.url),
+                        )).toList());
+                  }
+                  if (snapshot.hasError) {
+                    return const Center(child: Text("Something went wrong! See logs"));
+                  }
+                  // Still here, so must be still in progress...
+                  return const CircularProgressIndicator();
+                }
+            )
+          ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           Bookmark results = await Navigator.of(context).push(MaterialPageRoute(
@@ -75,9 +75,9 @@ class _ListPageState extends State<ListPage> {
           if (!mounted) {
             return;
           }
-	  // Value of -1 here indicates Cancel was pressed, so no item
-	  // saved, and thus don't need to rebuild.
-	  if (results.id == -1) {
+          // Value of -1 here indicates Cancel was pressed, so no item
+          // saved, and thus don't need to rebuild.
+          if (results.id == -1) {
             return;
           }
           setState( () {} );
