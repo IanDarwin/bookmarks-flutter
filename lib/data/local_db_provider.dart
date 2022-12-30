@@ -87,7 +87,8 @@ create table $bookmarkTableName (
 
   Future<List<Bookmark>> getAllBookmarks() async {
     List<Bookmark> result = [];
-    final List<Map> maps = await _db.query(bookmarkTableName);
+    final List<Map> maps = await _db.query(bookmarkTableName,
+        orderBy: 'lower($columnText)');
     if (maps.isNotEmpty) {
       for (Map m in maps) {
         result.add(Bookmark.fromMap(m));
