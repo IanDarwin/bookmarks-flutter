@@ -57,10 +57,10 @@ create table $bookmarkTableName (
   // Initial starter list of bookmarks
   final List<Bookmark> _demoList = [
     Bookmark('banking', 'https://www.alrajhibank.com.sa/en', 'al-Rajhi Bank'),
-    Bookmark('tech', 'https://darwinsys.com/', 'DarwinSys.com'),
+    Bookmark('tech', 'https://darwinsys.com/', "DarwinSys.com - Ian's site"),
     Bookmark('evs', 'https://IanOnEVs.com/', 'Ian On EVs'),
-    Bookmark('photog', 'https://IanDarwinPhoto.com', 'Ian Darwin Photo'),
     Bookmark('education', 'https://learningtree.com', 'Learning Tree International'),
+    Bookmark('news', 'https://TheGuardian.co.uk', 'The Guardian News'),
   ];
 
   // CRUD operations:
