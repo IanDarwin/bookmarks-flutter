@@ -57,11 +57,21 @@ create table $bookmarkTableName (
   // Initial starter list of bookmarks
   final List<Bookmark> _demoList = [
     Bookmark('banking', 'https://www.alrajhibank.com.sa/en', 'al-Rajhi Bank'),
-    Bookmark('tech', 'https://darwinsys.com/', "DarwinSys.com - Ian's site"),
+    Bookmark('tech', 'https://darwinsys.com/', "DarwinSys.com - Ian''s site"),
     Bookmark('evs', 'https://IanOnEVs.com/', 'Ian On EVs'),
     Bookmark('education', 'https://learningtree.com', 'Learning Tree International'),
     Bookmark('news', 'https://TheGuardian.co.uk', 'The Guardian News'),
   ];
+
+  // CATEGORIES
+  // Hard-coded for now
+  static final List<String> _categories = [
+    "News",
+    "Research",
+    "To Read",
+    "Writing",
+  ];
+
 
   // CRUD operations:
 
@@ -109,15 +119,6 @@ create table $bookmarkTableName (
   Future<int?> delete(int id) async {
     return await _db.delete(bookmarkTableName, where: '$columnId = ?', whereArgs: [id]);
   }
-
-  // CATEGORIES
-  // Fake for now
-  static final List<String> _categories = [
-    "News",
-    "Research",
-    "To Read",
-    "Writing",
-  ];
 
   List<String> get categories => _categories;
 
