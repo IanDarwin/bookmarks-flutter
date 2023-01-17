@@ -38,6 +38,7 @@ class _ListPageState extends State<ListPage> {
 
   @override
   Widget build(BuildContext context) {
+    var _pos;
     debugPrint("In _ListPageState.build()");
     _all = localDbProvider.getAllBookmarks();
     return Scaffold(
@@ -51,12 +52,48 @@ class _ListPageState extends State<ListPage> {
                 builder: (BuildContext context, AsyncSnapshot<List<Bookmark>> snapshot) {
                   if (snapshot.hasData) {
                     return Column(children: snapshot.data!.map((bookmark) =>
-                        ListTile(
+                        GestureDetector(
+                            onTapDown: (pos) {_pos = _getTapPosition(pos);},
+                            //onTap: () => alert(context, bookmark.url!, title: bookmark.text!),
+                            onLongPress: () async {
+                              final RenderObject? overlay =
+                              Overlay.of(context)?.context.findRenderObject();
+                              await showMenu(
+                                context: context,
+                                position: RelativeRect.fromRect(
+                                    Rect.fromLTWH(_pos.dx, _pos.dy, 50, 50),
+                                    Rect.fromLTWH(0, 0, overlay!.paintBounds.size.width,
+                                        overlay.paintBounds.size.height)),
+                                items: <PopupMenuEntry>[
+                                  PopupMenuItem(
+                                    onTap: () async => setState( () => _edit(context, bookmark)),
+                                    child: Row(
+                                      children: const <Widget>[
+                                        Icon(Icons.edit),
+                                        Text("Edit"),
+                                      ],
+                                    ),
+                                  ),
+                                  PopupMenuItem(
+                                    onTap: () async => setState( () => _delete(context, bookmark)),
+                                    child: Row(
+                                      children: const <Widget>[
+                                        Icon(Icons.delete),
+                                        Text("Delete"),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                        child: ListTile(
                           leading: const Icon(Icons.open_in_browser_outlined),
                           title: Text(bookmark.text!),
                           subtitle: Text(bookmark.url!),
                           onTap: () => _launchUrl(bookmark.url),
-                        )).toList());
+                        )
+                        )
+                    ).toList());
                   }
                   if (snapshot.hasError) {
                     return const Center(child: Text("Something went wrong! See logs"));
@@ -94,4 +131,39 @@ class _ListPageState extends State<ListPage> {
       throw 'Could not launch $urlStr';
     }
   }
+
+  Offset _getTapPosition(TapDownDetails tapPosition) {
+    final RenderBox referenceBox = context.findRenderObject() as RenderBox;
+    return referenceBox.globalToLocal(tapPosition.globalPosition);
+  }
+
+  _edit(BuildContext context, Bookmark bookmark) {
+    debugPrint("Edit code not written yet, Sorry");
+  }
+
+  _delete(BuildContext context, Bookmark bookmark) {
+    debugPrint("In _delete");
+    localDbProvider.delete(bookmark.id!);
+  }
 }
+
+alert(BuildContext context, String message, {title = 'Error', actions}) async {
+  debugPrint("alert('$message')");
+  showDialog<void>(
+      context: context,
+      barrierDismissible: true, // must tap a button to dismiss
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: actions ?? <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () => Navigator.pop(context),
+            ),
+          ],
+        );
+      }
+  );
+}
+
