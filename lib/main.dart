@@ -1,7 +1,9 @@
 import 'package:bookmarks/data/local_db_provider.dart';
+import 'package:cron/cron.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import 'data/sync_service.dart';
 import 'edit_page.dart';
 import 'intent_receiver.dart';
 import 'model/bookmark.dart';
@@ -9,9 +11,19 @@ import 'model/bookmark.dart';
 late LocalDbProvider localDbProvider ;
 
 void main() async {
+  // Set up local database
   WidgetsFlutterBinding.ensureInitialized();
   localDbProvider = LocalDbProvider();
   await localDbProvider.open('bookmarks.db');
+
+  // Set up background job to synch with server
+  final cron = Cron();
+  cron.schedule(Schedule.parse('01 * * * *'), () async {
+    debugPrint('hourly task running now');
+    SyncService.run();
+  });
+
+  // Finally, run the app
   runApp(const MaterialApp(
     home: ListPage(title: "Browser-independent Bookmarks"),
   ));
@@ -54,7 +66,6 @@ class _ListPageState extends State<ListPage> {
                     return Column(children: snapshot.data!.map((bookmark) =>
                         GestureDetector(
                             onTapDown: (pos) {_pos = _getTapPosition(pos);},
-                            //onTap: () => alert(context, bookmark.url!, title: bookmark.text!),
                             onLongPress: () async {
                               final RenderObject? overlay =
                               Overlay.of(context)?.context.findRenderObject();
@@ -133,6 +144,7 @@ class _ListPageState extends State<ListPage> {
   }
 
   Offset _getTapPosition(TapDownDetails tapPosition) {
+    print("PING");
     final RenderBox referenceBox = context.findRenderObject() as RenderBox;
     return referenceBox.globalToLocal(tapPosition.globalPosition);
   }

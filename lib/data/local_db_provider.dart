@@ -72,13 +72,12 @@ create table $bookmarkTableName (
     "Writing",
   ];
 
-
   // CRUD operations:
 
   /// "Create": Insert a Bookmark.
   Future<Bookmark> insert(Bookmark bookmark) async {
     debugPrint("LocalDbProvider::insert$bookmark");
-    bookmark.id = null;
+    bookmark.id = 0;
     bookmark.id = await _db.insert(bookmarkTableName, bookmark.toMap());
     return bookmark;
   }

@@ -1,12 +1,13 @@
 import 'dart:convert';
 
 class Bookmark {
-  int? id;
+  int id;
+  int remoteId = 0;
   String? topic;
   String? url;
   String? text;
 
-  Bookmark(this.topic, this.url, this.text, {this.id = 0});
+  Bookmark(this.topic, this.url, this.text, {this.id = 0, this.remoteId = 0});
 
   factory Bookmark.empty() {
     return Bookmark(null, null, null);
@@ -38,7 +39,7 @@ class Bookmark {
     // edit with care - no trailing "," on last n-v pair in JSON, meh
     return """
 \t{"bookmark":{
-\t\t"id":${id!},
+\t\t"id":${id},
 \t\t"topic":"${topic!}",
 \t\t"url":"${url!}",
 \t\t"text":"${text!}"
@@ -52,6 +53,7 @@ class Bookmark {
   }
 
   @override
+  // hashCode intentionally left blank, for now
   bool operator==(Object other) {
     if (identical(this, other)) {
       return true;
