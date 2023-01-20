@@ -54,7 +54,6 @@ class EditPageState extends State<EditPage> {
               ]),
               Row(children: [
                 Expanded(child:TextFormField(maxLength: 128,
-                    //focusNode: focusNode,
                     decoration: const InputDecoration(
                       border: OutlineInputBorder(),
                       labelText: "Description",
