@@ -25,6 +25,7 @@ class Bookmark {
   toMap() {
     return {
       'id': id,
+      'remoteId': remoteId,
       'topic': topic,
       'url' : url,
       'text' : text,
