@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:receive_sharing_intent/receive_sharing_intent.dart';
 
 import 'edit_page.dart';
+import 'model/bookmark.dart';
 
 class IntentReceiver {
   LocalDbProvider localDbProvider;
@@ -30,6 +31,6 @@ class IntentReceiver {
       return;
     }
     Navigator.of(context).push(MaterialPageRoute(
-        builder: (context) => EditPage(localDbProvider, url: value)));
+        builder: (context) => EditPage(localDbProvider, Bookmark.empty(), url: value)));
   }
 }

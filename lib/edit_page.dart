@@ -8,7 +8,8 @@ import 'model/bookmark.dart';
 class EditPage extends StatefulWidget {
   final String? url;
   final LocalDbProvider localDbProvider;
-  const EditPage(this.localDbProvider, {this.url, super.key});
+  final Bookmark bookmark;
+  const EditPage(this.localDbProvider, this.bookmark, {this.url, super.key});
 
   @override
   EditPageState createState() => EditPageState();
@@ -17,12 +18,21 @@ class EditPage extends StatefulWidget {
 class EditPageState extends State<EditPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   late FocusNode _focusNode;
-  final Bookmark _bookmark = Bookmark.empty();
+  late Bookmark _bookmark;
+
+  @override
+  void initState() {
+    debugPrint("EditPageState.initState()");
+    _bookmark = widget.bookmark;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
+    debugPrint("EditPageState.build()");
     // Stash value here b/c onChanged isn't triggered when 'share' used
-    _bookmark.url = widget.url;
+	  // But don't overwrite if we're editing.
+    _bookmark.url ??= widget.url;
 
     return Scaffold(
         appBar: AppBar(
@@ -41,7 +51,8 @@ class EditPageState extends State<EditPage> {
                       border: OutlineInputBorder(),
                       labelText: "URL",
                     ),
-                    initialValue: widget.url ?? "https://",
+                    keyboardType: TextInputType.url,
+                    initialValue: _bookmark.url ?? "https://",
                     autofocus: true,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (s) => s!.startsWith("https://") && s!.length > 8 ?
@@ -58,6 +69,8 @@ class EditPageState extends State<EditPage> {
                       border: OutlineInputBorder(),
                       labelText: "Description",
                     ),
+                    initialValue: _bookmark.text,
+                    textCapitalization: TextCapitalization.sentences,
                     autovalidateMode: AutovalidateMode.onUserInteraction,
                     validator: (s) => s!.isEmpty ? 'Title required' : null,
                     onChanged: (s) => _bookmark.text = s,
@@ -70,7 +83,7 @@ class EditPageState extends State<EditPage> {
                   border: OutlineInputBorder(),
                   labelText: "Category",
                 ),
-                // value: _selectedCategory,
+                // value: _bookmark.topic,
                 isExpanded: true,
                 items: widget.localDbProvider.categories.map((String cat) {
                   return DropdownMenuItem(
@@ -95,7 +108,7 @@ class EditPageState extends State<EditPage> {
                     onPressed: () {
                       if (_formKey.currentState!.validate()) {
                         debugPrint("Save/Update($_bookmark)");
-                        if (_bookmark.id == null || _bookmark.id == 0) {
+                        if (_bookmark.id == 0) {
                           widget.localDbProvider.insert(_bookmark);
                         } else {
                           widget.localDbProvider.update(_bookmark);

@@ -68,7 +68,7 @@ class _ListPageState extends State<ListPage> {
                             onTapDown: (pos) {_pos = _getTapPosition(pos);},
                             onLongPress: () async {
                               final RenderObject? overlay =
-                              Overlay.of(context)?.context.findRenderObject();
+                              Overlay.of(context).context.findRenderObject();
                               await showMenu(
                                 context: context,
                                 position: RelativeRect.fromRect(
@@ -77,7 +77,10 @@ class _ListPageState extends State<ListPage> {
                                         overlay.paintBounds.size.height)),
                                 items: <PopupMenuEntry>[
                                   PopupMenuItem(
-                                    onTap: () async => setState( () => _edit(context, bookmark)),
+                                    onTap: () async {
+                                      _edit(context, bookmark);
+                                      setState( () => { });
+                                    },
                                     child: Row(
                                       children: const <Widget>[
                                         Icon(Icons.edit),
@@ -86,7 +89,10 @@ class _ListPageState extends State<ListPage> {
                                     ),
                                   ),
                                   PopupMenuItem(
-                                    onTap: () async => setState( () => _delete(context, bookmark)),
+                                    onTap: () async {
+                                      _delete(context, bookmark);
+                                      setState( () => { });
+                                    },
                                     child: Row(
                                       children: const <Widget>[
                                         Icon(Icons.delete),
@@ -116,16 +122,11 @@ class _ListPageState extends State<ListPage> {
           ]),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          Bookmark results = await Navigator.of(context).push(MaterialPageRoute(
-              builder: (context) => (EditPage(localDbProvider))));
+          await Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => (EditPage(localDbProvider, Bookmark.empty()))));
           // BuildContext used from a StatefulWidget, 'mounted'
           // MUST be checked after an asynchronous gap.
           if (!mounted) {
-            return;
-          }
-          // Value of -1 here indicates Cancel was pressed, so no item
-          // saved, and thus don't need to rebuild.
-          if (results.id == -1) {
             return;
           }
           setState( () {} );
@@ -144,18 +145,22 @@ class _ListPageState extends State<ListPage> {
   }
 
   Offset _getTapPosition(TapDownDetails tapPosition) {
-    print("PING");
+    debugPrint("Tapped!");
     final RenderBox referenceBox = context.findRenderObject() as RenderBox;
     return referenceBox.globalToLocal(tapPosition.globalPosition);
   }
 
-  _edit(BuildContext context, Bookmark bookmark) {
-    debugPrint("Edit code not written yet, Sorry");
+  _edit(BuildContext context, Bookmark bookmark) async {
+    debugPrint("Edit");
+    Future.delayed(
+        const Duration(seconds: 0),
+            () => Navigator.of(context).push(MaterialPageRoute(
+              builder: (context) => (EditPage(localDbProvider, bookmark)))));
   }
 
-  _delete(BuildContext context, Bookmark bookmark) {
+  _delete(BuildContext context, Bookmark bookmark) async {
     debugPrint("In _delete");
-    localDbProvider.delete(bookmark.id!);
+    await localDbProvider.delete(bookmark.id);
   }
 }
 

@@ -15,7 +15,7 @@ you could lose all your work by uninstall/reinstall
 
 There are two main pages so far:
 
-* ListPage - main - start of a list-based main page that will
+* ListPage - main - start of a list-based main page that will:
 ** launch a browser if you tap on a URL;
 ** invoke the Add page from the FAB
 * EditPage - page for editing a bookmark.
@@ -24,12 +24,10 @@ The EditPage can be started when any other app does a "Share"
 of a web link and you choose to open with Bookmarks,
 even if the app isn't running. This works thanks to the
 _receive_sharing_intent_ plugin from _pub.dev_.
+Buglet: this doesn't refresh the list when you add this way.
 
-ListPage needs Category restriction dropdown, and Search.
+ListPage needs Search;
 Some of these lists will become long over time.
-
-ListPage should also handle long press on a bookmark, with a popup menu
-for edit, delete (any other?).
 
 A future version will have teh local database backed,
 either with Ian's Java-based backend or with FireBase.
