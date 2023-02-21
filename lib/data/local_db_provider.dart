@@ -10,7 +10,8 @@ const columnId = 'id';
 const columnTopic = 'topic';
 const columnUrl = ' url';
 const columnText = 'text';
-const allColumns = [columnId, columnTopic, columnUrl, columnText];
+const columnRemoteId = "remoteId";
+const allColumns = [columnId, columnTopic, columnUrl, columnText, columnRemoteId];
 
 const topicTableName = 'topics';
 const topicColumnId = 'id';
@@ -39,7 +40,8 @@ create table $bookmarkTableName (
   $columnId integer primary key autoincrement, 
   $columnTopic text not null,
   $columnUrl text not null,
-  $columnText text not null)
+  $columnText text not null,
+  $columnRemoteId text)
 ''');
     // Insert starter bookmark records
     for (Bookmark b in _demoList) {
@@ -56,7 +58,6 @@ create table $bookmarkTableName (
 
   // Initial starter list of bookmarks
   final List<Bookmark> _demoList = [
-    Bookmark('banking', 'https://www.alrajhibank.com.sa/en', 'al-Rajhi Bank'),
     Bookmark('tech', 'https://darwinsys.com/', "DarwinSys.com - Ian''s site"),
     Bookmark('evs', 'https://IanOnEVs.com/', 'Ian On EVs'),
     Bookmark('education', 'https://learningtree.com', 'Learning Tree International'),
@@ -77,8 +78,9 @@ create table $bookmarkTableName (
   /// "Create": Insert a Bookmark.
   Future<Bookmark> insert(Bookmark bookmark) async {
     debugPrint("LocalDbProvider::insert$bookmark");
-    bookmark.id = 0;
-    bookmark.id = await _db.insert(bookmarkTableName, bookmark.toMap());
+    var map = bookmark.toMap();
+    map.remove("id");
+    bookmark.id = await _db.insert(bookmarkTableName, map);
     return bookmark;
   }
 
