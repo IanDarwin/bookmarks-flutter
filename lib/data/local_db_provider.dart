@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../model/bookmark.dart';
+import '../model/topic.dart';
 
 const bookmarkTableName = 'bookmarks';
 const columnId = 'id';
@@ -15,7 +16,7 @@ const allColumns = [columnId, columnTopic, columnUrl, columnText, columnRemoteId
 
 const topicTableName = 'topics';
 const topicColumnId = 'id';
-const topicColumnDetails = 'text';
+const topicColumnName = 'name';
 
 /// Bookmark provider.
 class LocalDbProvider {
@@ -50,13 +51,33 @@ create table $bookmarkTableName (
         values('${b.topic_id}', '${b.url}', '${b.text}');
         ''');
     }
+
+    await database.execute('''
+create table $topicTableName ( 
+$topicColumnId text not null,
+$topicColumnName text not null)
+''');
+    for (Topic t in _demoTopicList) {
+    await database.execute('''
+        insert into $topicTableName($topicColumnId,$topicColumnName)
+        values('${t.id}', '${t.name}');
+        ''');
+    }
   }
 
   Future<void> _onUpgrade(Database base, int oldVersion, int newVersion) async {
     throw(Exception("onUpgrade not needed yet"));
   }
 
-  // Initial starter list of bookmarks
+  // Initial start list of Topic
+  final List<Topic> _demoTopicList = [
+    Topic('news', 'News'),
+    Topic('res', 'Research'),
+    Topic('read', 'To Read'),
+    Topic('wri', 'Writing'),
+  ];
+
+  // Initial starter list of Bookmark
   final List<Bookmark> _demoList = [
     Bookmark('tech', 'https://darwinsys.com/', "DarwinSys.com - Ian''s site"),
     Bookmark('evs', 'https://IanOnEVs.com/', 'Ian On EVs'),
@@ -113,7 +134,7 @@ create table $bookmarkTableName (
   /// "Update" a Bookmark.
   Future<int?> update(Bookmark bookmark) async {
     return await _db.update(bookmarkTableName, bookmark.toMap(),
-        where: '$columnId = ?', whereArgs: [bookmark.id!]);
+        where: '$columnId = ?', whereArgs: [bookmark.id]);
   }
 
   /// "Delete" a Bookmark.
