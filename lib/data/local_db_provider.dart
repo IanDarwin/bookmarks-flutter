@@ -47,7 +47,7 @@ create table $bookmarkTableName (
     for (Bookmark b in _demoList) {
       await database.execute('''
         insert into $bookmarkTableName($columnTopic,$columnUrl,$columnText)
-        values('${b.topic}', '${b.url}', '${b.text}');
+        values('${b.topic_id}', '${b.url}', '${b.text}');
         ''');
     }
   }

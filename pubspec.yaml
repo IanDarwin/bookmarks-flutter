@@ -3,7 +3,7 @@ description: A Flutter project. for Ian's Bookmarks scheme
 
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
-ersion: 1.0.0+1
+version: 1.0.0+1
 
 environment:
   sdk: '>=2.18.5 <3.0.0'
@@ -12,6 +12,7 @@ dependencies:
   cron: ^0.5.1
   flutter:
     sdk: flutter
+  flutter_settings_screens: ^0.3.3-null-safety+2
   http: ^0.13.5
   receive_sharing_intent: ^1.4.5
   sqflite: ^2.2.2

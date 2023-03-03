@@ -1,19 +1,9 @@
+
+
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:mobile_number/mobile_number.dart';
 import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 
-import 'package:icheckin/config/ops_units.dart';
-import 'package:icheckin/constants.dart';
-import 'package:icheckin/main.dart' show prefs, storage;
-import 'package:icheckin/ui/ui_utils.dart';
-
-int defaultCourseLength = 3;
-bool defaultSaveToCal = true;
-
-Future<String> getInstrCode() async {
-  return await storage.read(key: Constants.KEY_CODE);
-}
+import '../constants.dart';
 
 /// Activity for Settings.
 ///
@@ -26,9 +16,6 @@ class SettingsPage extends StatefulWidget {
 
 class SettingsState extends State<SettingsPage> {
 
-  OpsUnit defaultOpsUnit;
-  final Map<int,String> opsUnitMap = Map();
-
   SettingsState();
 
   @override
@@ -40,12 +27,12 @@ class SettingsState extends State<SettingsPage> {
   Widget build(BuildContext context) {
 
     return SettingsScreen(title: "Bookmark Settings",
-        children: <Widget>[
+        children: [
           SettingsGroup(title: "Connection",
               children: [
                 TextInputSettingsTile(
                   title: "Backend URL",
-                  settingKey: Constants.KEY_NAME,
+                  settingKey: Constants.keyUrl,
                   keyboardType: TextInputType.url,
                   validator: (instrName) {
                     if (instrName != null && instrName.startsWith("https://"))
@@ -56,19 +43,21 @@ class SettingsState extends State<SettingsPage> {
                 ),
                 TextInputSettingsTile(
                   title: "Username",
-                  settingKey: Constants.KEY_PHONE,
+                  settingKey: Constants.keyUserName,
                   keyboardType: TextInputType.name,
                   validator: (name) {
-                    if (name != null && name.isNotEmpty)
+                    if (name != null && name.isNotEmpty) {
                       return null;
+                    };
                     return "Username on server is required";
                   },
                   errorColor: Colors.redAccent,
                 ),
                 TextInputSettingsTile(
                   title: "Password",
-                  settingKey: Constants.KEY_CODE,
-                  keyboardType: TextInputType.text),
+                  settingKey: Constants.keyPass,
+                  keyboardType: TextInputType.text,
+
                   validator: (pw) {
                     if (pw != null && pw.isNotEmpty)
                       return null;
@@ -84,10 +73,9 @@ class SettingsState extends State<SettingsPage> {
               SwitchSettingsTile(
                 title: "Dark mode",
                   leading: Icon(Icons.dark_mode),
-                  settingKey: Constants.KEY_DARK_MODE,
+                  settingKey: Constants.keyDarkMode,
                   onChange: (val) {
-                    alert(context, "Change will take effect on app restart",
-                        title:'Dark Mode ${val?'on':'off'}');
+                    // XXX MAKE IT SO!!!!!
                   })
               ],
         )

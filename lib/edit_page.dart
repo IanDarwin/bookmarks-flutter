@@ -91,7 +91,7 @@ class EditPageState extends State<EditPage> {
                     child: Text(cat),
                   );
                 }).toList(),
-                onChanged: (value) => { _bookmark.topic = value! },
+                onChanged: (value) => { _bookmark.topic_id = value! },
                 validator: (s) => s == null || s == 'Required' ? "Category required" : null,
               ),
               Row(mainAxisAlignment: MainAxisAlignment.end,

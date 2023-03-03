@@ -1,6 +1,8 @@
 import 'package:bookmarks/data/local_db_provider.dart';
+import 'package:bookmarks/ui/nav_drawer.dart';
 import 'package:cron/cron.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_settings_screens/flutter_settings_screens.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'data/sync_service.dart';
@@ -15,6 +17,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   localDbProvider = LocalDbProvider();
   await localDbProvider.open('bookmarks.db');
+
+  // Init Settings_Screens
+  Settings.init();
 
   // Set up background job to synch with server
   final cron = Cron();
@@ -57,6 +62,7 @@ class _ListPageState extends State<ListPage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
+      drawer: const NavDrawer(),
       body:  ListView(
           children: <Widget>[
             FutureBuilder<List<Bookmark>>(

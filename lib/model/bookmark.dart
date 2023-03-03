@@ -3,11 +3,11 @@ import 'dart:convert';
 class Bookmark {
   int id;
   int remoteId = 0;
-  String? topic;
+  String? topic_id;
   String? url;
   String? text;
 
-  Bookmark(this.topic, this.url, this.text, {this.id = 0, this.remoteId = 0});
+  Bookmark(this.topic_id, this.url, this.text, {this.id = 0, this.remoteId = 0});
 
   factory Bookmark.empty() {
     return Bookmark(null, null, null);
@@ -15,7 +15,7 @@ class Bookmark {
 
   factory Bookmark.fromJsonString(String sb) {
     var json = jsonDecode(sb)["bookmark"];
-    return Bookmark(json['topic'], json['url'], json['text'], id: json['id']);
+    return Bookmark.fromMap(json);
   }
 
   factory Bookmark.fromMap(Map m) {
@@ -26,7 +26,7 @@ class Bookmark {
     return {
       'id': id,
       'remoteId': remoteId,
-      'topic': topic,
+      'topic': topic_id,
       'url' : url,
       'text' : text,
     };
@@ -41,7 +41,7 @@ class Bookmark {
     return """
 \t{"bookmark":{
 \t\t"id":${id},
-\t\t"topic":"${topic!}",
+\t\t"topic":"${topic_id!}",
 \t\t"url":"${url!}",
 \t\t"text":"${text!}"
 \t}}
@@ -50,7 +50,7 @@ class Bookmark {
 
   @override
   String toString() {
-    return 'Bookmark[#$id $topic $url, "$text"]';
+    return 'Bookmark[#$id $topic_id $url, "$text"]';
   }
 
   @override
@@ -61,7 +61,7 @@ class Bookmark {
     }
     var spare = other as Bookmark;
     return spare.id==id &&
-      spare.topic!.compareTo(spare.topic!) == 0 &&
+      spare.topic_id!.compareTo(spare.topic_id!) == 0 &&
       spare.url!.compareTo(spare.url!) == 0 &&
       spare.text!.compareTo(spare.text!) == 0;
   }
